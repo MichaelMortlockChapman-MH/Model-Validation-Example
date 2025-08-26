@@ -1,0 +1,59 @@
+﻿@model TestModel
+
+<form asp-action="Create" asp-controller="Test" method="post" id="applicationForm">
+    <input asp-for="dumbstring" />
+    <span asp-validation-for="dumbstring"></span>
+
+    <input asp-for="Num" onblur="formatDigit(this)" onfocus="removeValueNumberFormatting(this)"/>
+    <span asp-validation-for="Num"></span>
+
+    @for (int i = 0; i < Model.Applicants.Count; i++)
+    {
+        <div>
+            <input asp-for="Applicants[@i].Name" readonly />
+            <input asp-for="Applicants[@i].IsSelected" type="checkbox" class="applicant-group" />
+            <input asp-for="Applicants[@i].OwnedPercentage" class="applicant-num-group" />
+        </div>
+    }
+    <input type="hidden" asp-for="Dummy">
+    <span asp-validation-for="Dummy"></span>
+
+    <button type="submit">SUBMIT</button>
+</form>
+
+<script>
+    $(".applicant-group").on("change", function() {
+        $("#Dummy").valid();
+    });
+    $(".applicant-num-group").on("change", function() {
+        $("#Dummy").valid();
+    });
+</script>
+<script>
+    function removeValueNumberFormatting(oTxt) {
+        var num = oTxt.value;
+        num = num.toString().replace(/\$|\,/g, '');
+        oTxt.value = num;
+        oTxt.select();
+    }
+
+    function formatDigit(oTxt, numRound) {
+        var num = oTxt.value;
+        num = num.toString().replace(/\$|\,/g, '');
+        if (isNaN(num)) num = "0";
+        sign = (num == (num = Math.abs(num)));
+        if (!numRound) numRound = 0; //round up value
+        if (numRound > 0) {
+            num = num / numRound;
+            num = (Math.ceil(num) * numRound);
+        }
+        num = Math.floor(num * 100 + 0.50000000001);
+        cents = num % 100;
+        num = Math.floor(num / 100).toString();
+        if (cents < 10) cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+            num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3))
+        oTxt.value = ((((sign) ? '' : '-') + num + '.' + cents));
+    }
+
+</script>
