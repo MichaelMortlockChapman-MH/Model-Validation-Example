@@ -30,6 +30,10 @@ namespace WebApplication1.Controllers
                 Name = "Test4",
             });
 
+            model.CheckboxList = [false, false, false, false];
+
+            model.RadioList = [1, 6, 20, 52];
+
             return View("~/Views/Home/Application.cshtml", model);
         }
 

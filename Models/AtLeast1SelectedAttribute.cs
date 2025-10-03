@@ -38,7 +38,7 @@ namespace WebApplication1.Models
         {
             MergeAttribute(context.Attributes, "data-val", "true");
             MergeAttribute(context.Attributes, "data-val-atleast1selected", ErrorMessage ?? "At least one applicant must be selected");
-            MergeAttribute(context.Attributes, "data-val-atleast1selected-group", ".applicant-group");
+            MergeAttribute(context.Attributes, "data-val-atleast1selected-group", $".{ListProperty}-group");
         }
 
         private void MergeAttribute(IDictionary<string, string> attributes, string key, string value)

@@ -62,6 +62,32 @@ $.validator.methods.range = function (value, element, params) {
     return this.optional(element) || parseFloatFormatted(value) >= params[0] && parseFloatFormatted(value) <= params[1]
 };
 
+var baseHighlight = $.validator.defaults.highlight;
+var baseUnhighlight = $.validator.defaults.unhighlight;
 $.validator.setDefaults({
-    ignore: ":hidden:not(#Dummy)" // include #Applicants
+    ignore: ":hidden:not(.always-validate)",
+    highlight: function (element, errorClass, validClass) {
+        var $el = $(element);
+        var parentId = $el.attr("highlight");
+
+        if (parentId) {
+            $("#" + parentId).addClass("container-validation-error");
+        } else {
+            if (baseHighlight) {
+                baseHighlight.call(this, element, errorClass, validClass);
+            }
+        }
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        var $el = $(element);
+        var parentId = $el.attr("highlight");
+
+        if (parentId) {
+            $("#" + parentId).removeClass("container-validation-error");
+        } else {
+            if (baseUnhighlight) {
+                baseUnhighlight.call(this, element, errorClass, validClass);
+            }
+        }
+    }
 });

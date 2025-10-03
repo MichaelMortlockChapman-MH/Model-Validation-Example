@@ -11,6 +11,22 @@ namespace WebApplication1.Models
         [Range(1, 1000000000)]
         public decimal Num { get; set; }
 
+        [Required]
+        public string AString { get; set; }
+        [Required]
+        public string AString2 { get; set; }
+        [Required]
+        public DateTime? ADate { get; set; } = null;
+
+        public List<bool> CheckboxList { get; set; } = new();
+
+        [Required(ErrorMessage = "PICK 1")]
+        public int? RadioListSelected { get; set; } = null;
+        public List<int> RadioList { get; set; } = new();
+
+        [AtLeast1Selected("CheckboxList", ErrorMessage = "PICK 1")]
+        public string? CheckboxListDummy { get; set; }
+
         [AtLeast1Selected("Applicants", ErrorMessage = "PICK 1")]
         [TotalSelectedIs100(".applicant-group", ".applicant-num-group", "Applicants", true, ErrorMessage = "MUST TOTAL 100")]
         public string? Dummy {get; set;}

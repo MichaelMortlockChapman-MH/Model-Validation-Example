@@ -1,24 +1,103 @@
 ﻿@model TestModel
-
-<form asp-action="Create" asp-controller="Test" method="post" id="applicationForm">
-    <input asp-for="dumbstring" />
-    <span asp-validation-for="dumbstring"></span>
-
-    <input asp-for="Num" onblur="formatDigit(this)" onfocus="removeValueNumberFormatting(this)"/>
-    <span asp-validation-for="Num"></span>
-
-    @for (int i = 0; i < Model.Applicants.Count; i++)
-    {
-        <div>
-            <input asp-for="Applicants[@i].Name" readonly />
-            <input asp-for="Applicants[@i].IsSelected" type="checkbox" class="applicant-group" />
-            <input asp-for="Applicants[@i].OwnedPercentage" class="applicant-num-group" />
-        </div>
+<style>
+    .input-validation-error {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 5px rgba(220, 53, 69, 0.3) !important;
     }
-    <input type="hidden" asp-for="Dummy">
-    <span asp-validation-for="Dummy"></span>
 
-    <button type="submit">SUBMIT</button>
+    .field-validation-error::before {
+        content: "* "; /* the red asterisk */
+        color: red;
+        font-weight: bold;
+    }
+
+    .field-validation-error {
+        color: red;
+        display: block;
+        margin-top: 2px;
+    }
+
+    .container-validation-error {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 5px rgba(220, 53, 69, 0.3) !important;
+    }
+</style>
+<style>
+    .div-box {
+        background-color : lightblue;
+        border: 1px dotted;
+        padding: 5px;
+    }
+</style>
+<form asp-action="Create" asp-controller="Test" method="post" id="applicationForm" style="display: flex; flex-direction: column; gap: 15px">
+    <div>
+        <input asp-for="dumbstring" />
+        <span asp-validation-for="dumbstring"></span>
+    </div>
+    <div>
+        <input asp-for="Num"/>
+        <span asp-validation-for="Num"></span>
+    </div>
+    <div>
+        <input asp-for="AString"/>
+        <button type="button">A Button</button>
+        <span asp-validation-for="AString"></span>
+    </div>
+    <div>
+        <div>
+            <input asp-for="AString2" />
+            <button type="button">A Button</button>
+        </div>
+        <span asp-validation-for="AString2"></span>
+    </div>
+    <div>
+        <input type="date" asp-for="ADate" />
+        <span asp-validation-for="ADate"></span>
+    </div>
+    <div>
+        <div id="CheckboxListBox" class="div-box">
+            @for (int i = 0; i < Model.CheckboxList.Count; i++)
+            {
+                <div>
+                    <input asp-for="CheckboxList[i]" type="checkbox" class="CheckboxList-group" />
+                </div>
+            }
+            <input highlight="CheckboxListBox" type="hidden" class="always-validate" asp-for="CheckboxListDummy">
+        </div>
+        <span asp-validation-for="CheckboxListDummy"></span>
+    </div>
+    <div>
+        <div id="RadioListBox" class="div-box">
+            @for (int i = 0; i < Model.RadioList.Count; i++)
+            {
+                <div>
+                    <label>
+                        <input class="RadioList-group" type="radio" value="@Model.RadioList[i]" onclick="$('#RadioListSelected').val(@Model.RadioList[i]);" id="Radio_@Model.RadioList[i]" />
+                        @Model.RadioList[i]
+                    </label>
+                </div>
+            }
+            <input highlight="RadioListBox" type="hidden" class="always-validate" asp-for="RadioListSelected" />
+        </div>
+        <span asp-validation-for="RadioListSelected"></span>
+    </div>
+    <div>
+        <div id="ApplicantBox" class="div-box">
+            @for (int i = 0; i < Model.Applicants.Count; i++)
+            {
+                <div>
+                    <input asp-for="Applicants[@i].Name" readonly />
+                    <input asp-for="Applicants[@i].IsSelected" type="checkbox" class="Applicant-group" />
+                    <input asp-for="Applicants[@i].OwnedPercentage" class="Applicant-num-group" />
+                </div>
+            }
+            <input highlight="RadioListBox" type="hidden" class="always-validate" asp-for="Dummy">
+        </div>
+        <span asp-validation-for="Dummy"></span>
+    </div>
+    <div>
+        <button type="submit">SUBMIT</button>
+    </div>
 </form>
 
 <script>
@@ -28,32 +107,10 @@
     $(".applicant-num-group").on("change", function() {
         $("#Dummy").valid();
     });
-</script>
-<script>
-    function removeValueNumberFormatting(oTxt) {
-        var num = oTxt.value;
-        num = num.toString().replace(/\$|\,/g, '');
-        oTxt.value = num;
-        oTxt.select();
-    }
-
-    function formatDigit(oTxt, numRound) {
-        var num = oTxt.value;
-        num = num.toString().replace(/\$|\,/g, '');
-        if (isNaN(num)) num = "0";
-        sign = (num == (num = Math.abs(num)));
-        if (!numRound) numRound = 0; //round up value
-        if (numRound > 0) {
-            num = num / numRound;
-            num = (Math.ceil(num) * numRound);
-        }
-        num = Math.floor(num * 100 + 0.50000000001);
-        cents = num % 100;
-        num = Math.floor(num / 100).toString();
-        if (cents < 10) cents = "0" + cents;
-        for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
-            num = num.substring(0, num.length - (4 * i + 3)) + ',' + num.substring(num.length - (4 * i + 3))
-        oTxt.value = ((((sign) ? '' : '-') + num + '.' + cents));
-    }
-
+    $(".CheckboxList-group").on("change", function() {
+        $("#CheckboxListDummy").valid();
+    });
+    $(".RadioList-group").on("change", function() {
+        $("#RadioListSelected").valid();
+    });
 </script>
