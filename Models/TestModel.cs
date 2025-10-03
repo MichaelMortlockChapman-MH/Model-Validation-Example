@@ -28,7 +28,7 @@ namespace WebApplication1.Models
         public string? CheckboxListDummy { get; set; }
 
         [AtLeast1Selected("Applicants", ErrorMessage = "PICK 1")]
-        [TotalSelectedIs100(".applicant-group", ".applicant-num-group", "Applicants", true, ErrorMessage = "MUST TOTAL 100")]
+        [TotalSelectedIs100(".Applicants-group", ".Applicants-num-group", "Applicants", true, ErrorMessage = "MUST TOTAL 100")]
         public string? Dummy {get; set;}
     }
 

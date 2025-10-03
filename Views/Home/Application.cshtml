@@ -87,11 +87,11 @@
             {
                 <div>
                     <input asp-for="Applicants[@i].Name" readonly />
-                    <input asp-for="Applicants[@i].IsSelected" type="checkbox" class="Applicant-group" />
-                    <input asp-for="Applicants[@i].OwnedPercentage" class="Applicant-num-group" />
+                    <input asp-for="Applicants[@i].IsSelected" type="checkbox" class="Applicants-group" />
+                    <input asp-for="Applicants[@i].OwnedPercentage" class="Applicants-num-group" />
                 </div>
             }
-            <input highlight="RadioListBox" type="hidden" class="always-validate" asp-for="Dummy">
+            <input highlight="ApplicantBox" type="hidden" class="always-validate" asp-for="Dummy" />
         </div>
         <span asp-validation-for="Dummy"></span>
     </div>
@@ -101,10 +101,10 @@
 </form>
 
 <script>
-    $(".applicant-group").on("change", function() {
+    $(".Applicants-group").on("change", function() {
         $("#Dummy").valid();
     });
-    $(".applicant-num-group").on("change", function() {
+    $(".Applicants-num-group").on("change", function() {
         $("#Dummy").valid();
     });
     $(".CheckboxList-group").on("change", function() {
